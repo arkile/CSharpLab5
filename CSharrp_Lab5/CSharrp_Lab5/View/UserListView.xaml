@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="CSharp_Lab5.View.UserListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CSharp_Lab5.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="13*"></RowDefinition>
+
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer Grid.ColumnSpan="4" Background="Transparent" HorizontalScrollBarVisibility="Auto" Grid.RowSpan="1">
+
+            <DataGrid x:Name="ProcessesDataGrid"
+                      HorizontalGridLinesBrush="DarkGray"
+                      Background="Transparent" RowBackground="#5FFFFFFF"
+                      CanUserSortColumns="True" IsReadOnly="True"
+                      AutoGenerateColumns="False"
+                      ItemsSource="{Binding ProcessesList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding SelectedProcess, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+                      AlternatingRowBackground="Coral">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Path=Name}" />
+                    <DataGridTextColumn Header="ID" Binding="{Binding Path=Id}" />
+                    <DataGridTextColumn Header="Active" Binding="{Binding Path=IsActive}" />
+                    <DataGridTextColumn Header="CPU usage" Binding="{Binding Path=Cpu}" />
+                    <DataGridTextColumn Header="Memory usage" Binding="{Binding Path=Memory}" />
+                    <DataGridTextColumn Header="Threads count" Binding="{Binding Path=NumOfThreads}" />
+                    <DataGridTextColumn Header="User" Binding="{Binding Path=UserName}" />
+                    <DataGridTextColumn Header="Path" Binding="{Binding Path=Path}" />
+                    <DataGridTextColumn Header="Active since" Binding="{Binding Path=LaunchDateTime}" />
+                </DataGrid.Columns>
+                <DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="0" Background="AliceBlue" Padding="10">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row ="0" Foreground="Black"
+                                           TextWrapping="Wrap" Background="#15ffffff" FontFamily="Centure Ghotic"
+                                           TextAlignment="Left" FontSize="16" Margin="10" Text="Modules"/>
+
+                                <DataGrid x:Name="ProcessModules" Grid.Row="1"
+                                          CanUserSortColumns="True" IsReadOnly="True"
+                                          AutoGenerateColumns="True"
+                                          ItemsSource="{Binding Path=Modules, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                </DataGrid>
+
+                                <TextBlock Grid.Row ="2" Foreground="Black"
+                                           TextWrapping="Wrap" Background="#15ffffff" FontFamily="Centure Ghotic"
+                                           TextAlignment="Left" FontSize="16" Margin="10" Text="Threads"/>
+
+                                <DataGrid x:Name="ProcessThreads" Grid.Row="3"
+                                          CanUserSortColumns="True" IsReadOnly="True"
+                                          AutoGenerateColumns="True"
+                                          ItemsSource="{Binding Path=Threads, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                </DataGrid>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
+
+            </DataGrid>
+
+        </ScrollViewer>
+        <Button Content="Exit Process" Grid.Row="2" Grid.Column="3" FontFamily="Centure Ghotic" FontSize="17" Width="150" HorizontalAlignment="Right" Height="35"  Command="{Binding ExitProcessCommand, Mode=OneWay}"/>
+        <Button Content="Sort" Grid.Row="2" Grid.Column="1" FontFamily="Centure Ghotic" FontSize="17" Width="150" HorizontalAlignment="Center" Height="35" Command="{Binding SortCommand}"/>
+        <ComboBox  HorizontalAlignment="Left" Grid.Row="2" Width="150" Text="{Binding SortBy}" FontFamily="Centure Ghotic" FontSize="17" Height="35">
+            <TextBlock>None</TextBlock>
+            <TextBlock>Name</TextBlock>
+            <TextBlock>Id</TextBlock>
+            <TextBlock>Active</TextBlock>
+            <TextBlock >CPU</TextBlock>
+            <TextBlock>RAM</TextBlock>
+            <TextBlock>Threads</TextBlock>
+            <TextBlock>User</TextBlock>
+            <TextBlock>Start date</TextBlock>
+
+        </ComboBox>
+        <Button Content="Open folder" Grid.Row="2" Grid.Column="2" FontFamily="Centure Ghotic" FontSize="17" Width="150" HorizontalAlignment="Center" Height="35" Command="{Binding OpenFolderCommand}"/>
+    </Grid>
+</UserControl>
