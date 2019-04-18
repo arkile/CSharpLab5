@@ -5,7 +5,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using CSharp_Lab5.Tools;using CSharp_Lab5.Model;
+using CSharp_Lab5.Tools;
+using CSharp_Lab5.Model;
+using System.Threading;
 
 namespace CSharp_Lab5.ViewModel
 {
@@ -46,8 +48,28 @@ namespace CSharp_Lab5.ViewModel
                 ProcessesList.Add(new MyProcess(process));
             }
 
+            Thread refreshThread = new Thread(new ThreadStart(RefreshThreads));
+            refreshThread.Start();
+        }
 
+        private void RefreshThreads()
+        {
 
+            lock (new Object())
+            {
+                while (true)
+                {
+                    Process[] processes = Process.GetProcesses();
+                    ObservableCollection<MyProcess> newProcessesList = new ObservableCollection<MyProcess>();
+                    foreach (var process in processes)
+                    {
+                        newProcessesList.Add(new MyProcess(process));
+                    }
+
+                    ProcessesList = newProcessesList;
+                    Thread.Sleep(5000);
+                }
+            }
 
         }
 

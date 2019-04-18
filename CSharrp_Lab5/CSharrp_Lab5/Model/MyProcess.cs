@@ -34,7 +34,12 @@ namespace CSharp_Lab5.Model
                 {
                     return DateTime.Now;
                 }
-                //return null;
+                catch (System.InvalidOperationException)
+                {
+                    return DateTime.Now;
+                }
+         
+
             }
         }
 
@@ -47,8 +52,15 @@ namespace CSharp_Lab5.Model
             get
             {
                 PerformanceCounter cpuCounter = new PerformanceCounter("Process", "% Processor Time", Process.ProcessName);
-                cpuCounter.NextValue();
-                return cpuCounter.NextValue();
+                try
+                {
+                    cpuCounter.NextValue();
+                    return cpuCounter.NextValue();
+                }
+                catch (Exception)
+                {
+                    return 0;
+                }
             }
 
         }
@@ -92,9 +104,23 @@ namespace CSharp_Lab5.Model
         {
             if (_modules == null)
                 _modules = new ObservableCollection<Module>();
-            foreach (ProcessModule pm in Process.Modules)
+            try
             {
-                _modules.Add(new Module(pm));
+                foreach (ProcessModule pm in Process.Modules)
+                {
+                    try
+                    {
+                        _modules.Add(new Module(pm));
+                    }
+                    catch (Win32Exception e)
+                    {
+                        _modules.Add(new Module());
+                    }
+                }
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                _modules.Add(new Module());
             }
         }
 
